@@ -26,7 +26,7 @@ public class TowerSpawning : MonoBehaviour
                 RotateSpawnedTower();
             }
             if(Input.GetMouseButtonDown(0)){
-                _spawnedTower.transform.GetChild(0).GetComponent<TowerShooting>().isPlaced = true;
+                _spawnedTower.transform.GetChild(0).GetComponent<ShootingEnemies>().isPlaced = true;
                 _spawnedTower = null;
             }
         }
@@ -39,7 +39,7 @@ public class TowerSpawning : MonoBehaviour
     private void Raycasting()
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out RaycastHit hit, _ground))
+        if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _ground))
         {
             var point = hit.point;
             _spawnedTower.transform.position = new Vector3(RecalculatePosition(point.x), point.y + 1f, RecalculatePosition(point.z));            

@@ -198,6 +198,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7832319942963863574, guid: 5eb30b3c40a2c814eba7da2481069b71, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7832319942963863574, guid: 5eb30b3c40a2c814eba7da2481069b71, type: 3}
       propertyPath: _lerpSpeed
       value: 5
       objectReference: {fileID: 0}
@@ -219,6 +223,30 @@ PrefabInstance:
       objectReference: {fileID: 6311973057898821847}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5eb30b3c40a2c814eba7da2481069b71, type: 3}
+--- !u!1 &4601522344925911128 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7512925830612910667, guid: 5eb30b3c40a2c814eba7da2481069b71, type: 3}
+  m_PrefabInstance: {fileID: 6311973056740776467}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7093436322251548997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601522344925911128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e81b3cf0815894fb260befc6142cba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemy: {fileID: 0}
+  _tower: {fileID: 11400000, guid: 972e9c760ca91fd4cb3bcfc7495c118e, type: 2}
+  _bulletInstantiateTransform: {fileID: 6311973057898821847}
+  _force: 1000
+  _lerpSpeed: 5
+  _moveAmount: 0
+  isPlaced: 0
 --- !u!4 &4601522344925911132 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7512925830612910671, guid: 5eb30b3c40a2c814eba7da2481069b71, type: 3}

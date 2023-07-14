@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class TowerShooting : MonoBehaviour
+public class ShootingEnemies : MonoBehaviour
 {
     [SerializeField] private Transform _enemy;
     [SerializeField] private Towers _tower;
@@ -12,7 +12,6 @@ public class TowerShooting : MonoBehaviour
     [SerializeField] private float _lerpSpeed = 1f;
     [SerializeField] private float _moveAmount = 2f;
     
-
     private ObjectPool<Bullet> _bulletPool;
     private Bullet _bulletPrefab;
     private float _bulletShootingRate;//Reversed higher means lower shooting rate
@@ -21,6 +20,7 @@ public class TowerShooting : MonoBehaviour
     public bool isPlaced;
     private GameObject parentOfBullets;
     private Vector3 baseRotation;
+
 
     private void Awake() {
 
@@ -38,25 +38,28 @@ public class TowerShooting : MonoBehaviour
         _bulletPrefab = _tower.ammoType;
         _bulletShootingRate = _tower.towerShootingRate;
 
-        // parentOfBullets = new GameObject();
-        // parentOfBullets.name = "Parent Of Bullets";
+        parentOfBullets = new GameObject();
+
+        parentOfBullets.name = "Parent Of Bullets";
 
         baseRotation = transform.localRotation.eulerAngles;
-        //_enemy = FindObjectOfType<Enemy>().transform;
     }
+
 
     private void Update() {
         if(_enemy == null)
         {
             if(Enemies._enemyList.Count > 0)
+            {
                 _enemy = SelectCurrentEnemy(Enemies._enemyList);
+            }
         }
         else
         {
             if(isPlaced)
             {
                 MoveTurret();
-                if(CalculateTime(_bulletShootingRate) && enemyLocked) 
+                if(CalculateTime(_bulletShootingRate) && enemyLocked)
                 {
                     Shoot();
                 }
@@ -65,22 +68,58 @@ public class TowerShooting : MonoBehaviour
     }
     private void MoveTurret()
     {
-        var shootingDirection = CalculateDirOfTurret();
-        Quaternion lookRotation = Quaternion.LookRotation(shootingDirection);
-
-        if(RotationLocked(lookRotation))
+        var dir = CalculateDirOfTurret();
+        Quaternion lookRotation = Quaternion.LookRotation(dir);
+        var canMove = RotationLocked(lookRotation);
+        
+        if(canMove)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.parent.rotation.eulerAngles), _lerpSpeed * Time.deltaTime);
-
-            _enemy = null;
-            enemyLocked = false;
-            _enemy = SelectCurrentEnemy(Enemies._enemyList);
-        } 
+            enemyLocked = true;
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, _lerpSpeed * Time.deltaTime);
+        }
         else
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, _lerpSpeed * Time.deltaTime);     
-            enemyLocked = true;
+            _enemy = null;        
+            enemyLocked = false;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.parent.rotation.eulerAngles), _lerpSpeed * Time.deltaTime);
         }
+
+        if(_enemy != null && CalculateDistance(_enemy.GetComponent<Enemy>()) > 10f)
+        {
+            _enemy = null;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.parent.rotation.eulerAngles), _lerpSpeed * Time.deltaTime);
+        }
+    }
+    private void Shoot()
+    {
+        Vector3 shootingDirection = CalculateDirOfTurret();
+        Bullet bullet = _bulletPool.Get();
+        bullet.transform.parent = parentOfBullets.transform;
+        bullet.KillBullet(ReleaseBullet);
+            
+        bullet.transform.position = _bulletInstantiateTransform.position;
+        bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * _force); 
+            
+    }
+    private float CalculateDistance(Enemy enemy)
+    {
+        float distance = Vector3.Distance(transform.parent.position, enemy.transform.position);
+        return distance;
+    }
+    private Transform SelectCurrentEnemy(List<Enemy> enemies)
+    {
+
+        Enemy currentSelectedEnemy = enemies[0];   
+
+        for (int i = 1; i < enemies.Count; i++)
+        {
+            if(CalculateDistance(enemies[i]) < CalculateDistance(enemies[i-1]))
+            {
+                currentSelectedEnemy = enemies[i];
+            }
+        }
+        enemyLocked = true;
+        return currentSelectedEnemy.transform;
     }
     private Vector3 CalculateDirOfTurret()
     {
@@ -97,52 +136,15 @@ public class TowerShooting : MonoBehaviour
             yRotation -= 360f;
         if(yRotationOfParent > 180f)
             yRotationOfParent -= 360f;
-
-        // if(yRotation > 60f + yRotationOfParent || yRotation < -60f + yRotationOfParent) return true; //Cant move 
-        // else return false; //can move           
+        
         float maxRotation = yRotationOfParent + 60f;
         float minRotation = yRotationOfParent - 60f;
         if (yRotation > maxRotation || yRotation < minRotation)
-            return true; // Can't move
+            return false; // Can move
         else
-            return false; // Can move 
+            return true; // Can't move 
+            
     }
-    private void Shoot()
-    {
-        Vector3 shootingDirection = CalculateDirOfTurret();
-        Bullet bullet = _bulletPool.Get();
-        bullet.transform.parent = parentOfBullets.transform;
-        bullet.KillBullet(ReleaseBullet);
-        
-        bullet.transform.position = _bulletInstantiateTransform.position;
-        bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * _force);      
-    }
-    private void ReleaseBullet(Bullet bullet)
-    {
-        _bulletPool.Release(bullet);
-    }
-   
-    private Transform SelectCurrentEnemy(List<Enemy> enemies)
-    {
-        float CalculateDistance(Enemy enemy)
-        {
-            float distance = Vector3.Distance(transform.position, enemy.transform.position);
-            return distance;
-        }
-
-        Enemy current = enemies[0];    
-
-        for (int i = 1; i < enemies.Count; i++)
-        {
-            if(CalculateDistance(enemies[i]) < CalculateDistance(enemies[i-1]))
-            {
-                current = enemies[i];
-            }
-        }
-        enemyLocked = true;
-        return current.transform;
-    }
-    
     private bool CalculateTime(float maxTime)
     {
         _elapsedTime += Time.deltaTime;
@@ -153,5 +155,8 @@ public class TowerShooting : MonoBehaviour
         }             
         else return false;   
     }
+    private void ReleaseBullet(Bullet bullet)
+    {
+        _bulletPool.Release(bullet);
+    }
 }
-
