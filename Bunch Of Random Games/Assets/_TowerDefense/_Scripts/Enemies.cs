@@ -11,7 +11,8 @@ public class Enemies : MonoBehaviour
     [SerializeField] private float speed = 1f;
     [SerializeField] private Transform beginningPoint;
     [SerializeField] private Transform endPoint;
-    [SerializeField] private bool isCamShaking;
+    [SerializeField] private float shakeStrength = 1f;
+    public static bool isCamShaking;
 
     private float _elapsedTime;
     private int count = 1;
@@ -67,14 +68,15 @@ public class Enemies : MonoBehaviour
     {
         float elapsedTime = 0f;
 
-        while (elapsedTime < 1f)
+        while (elapsedTime < 0.3f)
         {
             elapsedTime += Time.deltaTime;
 
-            Vector3 camPos = _beginPos + Random.insideUnitSphere;
+            Vector3 camPos = _beginPos + Random.insideUnitSphere * shakeStrength;
             _mainCam.transform.position = camPos;
 
             yield return null; 
         }
+        isCamShaking = false;
     }
 }

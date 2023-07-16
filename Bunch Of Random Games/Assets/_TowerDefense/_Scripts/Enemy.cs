@@ -18,7 +18,10 @@ public class Enemy : MonoBehaviour
     }
     private void Update() {
         if(ReachedDestinationOrGaveUp(_agent))
+        {
+            Enemies.isCamShaking = true;
             Destroy(this.gameObject);
+        }
     }
     private bool ReachedDestinationOrGaveUp(NavMeshAgent navMeshAgent)
     {
