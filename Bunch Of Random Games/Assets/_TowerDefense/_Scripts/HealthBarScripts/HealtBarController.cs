@@ -25,6 +25,17 @@ public class HealtBarController : MonoBehaviour
         Health.OnHealthAdded -= AddHealthBar;
         Health.OnHealthRemoved -= RemoveHealthBar;
     }
+    private void Awake() {
+        var healthObjs = FindObjectsOfType<Health>();
+        foreach (var item in healthObjs)
+        {
+            if(item.tag == "Castle")
+            {
+                item.gameObject.SetActive(false);
+                //item.gameObject.SetActive(true);
+            }
+        }
+    }
     private void AddHealthBar(Health _health)
     {
         if(!healthBars.ContainsKey(_health))

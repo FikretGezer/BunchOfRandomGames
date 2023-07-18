@@ -16,6 +16,7 @@ public class TowerShooting : MonoBehaviour
     private ObjectPool<Bullet> _bulletPool;
     private Bullet _bulletPrefab;
     private float _bulletShootingRate;//Reversed higher means lower shooting rate
+    private float _bulletDamageAmount;
     private float _elapsedTime;
     private bool enemyLocked;
     public bool isPlaced;
@@ -37,6 +38,7 @@ public class TowerShooting : MonoBehaviour
 
         _bulletPrefab = _tower.ammoType;
         _bulletShootingRate = _tower.towerShootingRate;
+        _bulletDamageAmount = _tower.damageAmount;
 
         // parentOfBullets = new GameObject();
         // parentOfBullets.name = "Parent Of Bullets";
@@ -52,7 +54,7 @@ public class TowerShooting : MonoBehaviour
                 _enemy = SelectCurrentEnemy(Enemies._enemyList);
         }
         else
-        {
+        {            
             if(isPlaced)
             {
                 MoveTurret();
@@ -61,14 +63,16 @@ public class TowerShooting : MonoBehaviour
                     Shoot();
                 }
             }
-        }
+        }  
+        if(!_enemy.gameObject.activeInHierarchy)      
+            Debug.Log("damn");
     }
     private void MoveTurret()
     {
         var shootingDirection = CalculateDirOfTurret();
         Quaternion lookRotation = Quaternion.LookRotation(shootingDirection);
 
-        if(RotationLocked(lookRotation))
+        if(RotationLocked(lookRotation) || !_enemy.gameObject.activeSelf)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.parent.rotation.eulerAngles), _lerpSpeed * Time.deltaTime);
 
@@ -81,6 +85,12 @@ public class TowerShooting : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, _lerpSpeed * Time.deltaTime);     
             enemyLocked = true;
         }
+        // if(!_enemy.gameObject.activeSelf)
+        // {
+        //     _enemy = null;
+        //     enemyLocked = false;
+        //     _enemy = SelectCurrentEnemy(Enemies._enemyList);
+        // }
     }
     private Vector3 CalculateDirOfTurret()
     {
@@ -113,6 +123,7 @@ public class TowerShooting : MonoBehaviour
         Bullet bullet = _bulletPool.Get();
         bullet.transform.parent = parentOfBullets.transform;
         bullet.KillBullet(ReleaseBullet);
+        bullet.KillBullet(_bulletDamageAmount);
         
         bullet.transform.position = _bulletInstantiateTransform.position;
         bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * _force);      

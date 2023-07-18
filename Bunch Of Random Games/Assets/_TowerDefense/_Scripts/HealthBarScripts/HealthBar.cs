@@ -20,22 +20,24 @@ public class HealthBar : MonoBehaviour
     private void Update() {
         if(health != null)
         {
-            transform.position = cam.WorldToScreenPoint(health.transform.position);
+            transform.position = cam.WorldToScreenPoint(health.transform.position);//Add UI Elements on World
+
+            if(actualHealthBar.fillAmount > 0.01f)
+            {
+                actualHealthBar.fillAmount = Mathf.MoveTowards(actualHealthBar.fillAmount, health.healthAmount, 1f * Time.deltaTime);
+            }
+            else
+            {
+                CameraScript.isCamShaking = true;
+                health.gameObject.SetActive(false);
+            }
         }
-        if(Input.GetMouseButtonDown(0))
-        {
-            healthAmount -= 0.2f;
-        }
-        if(actualHealthBar.fillAmount > 0.01f)
-            actualHealthBar.fillAmount = Mathf.MoveTowards(actualHealthBar.fillAmount, healthAmount, 0.3f * Time.deltaTime);
-        else
-        {
-            Enemies.isCamShaking = true;
-            health.gameObject.SetActive(false);
-        }
+
+        //Decrease Health When Something Happened
+        
     }
     public void SetHealth(Health _health)
     {
         this.health = _health;
-    }
+    }    
 }

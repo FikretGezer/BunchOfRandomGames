@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 355669d6a7189bf468a8dbc1aa5a04b4, type: 3}
   m_Name: NormalTower
   m_EditorClassIdentifier: 
-  towerShootingRate: 1
+  towerShootingRate: 1.5
+  damageAmount: 0.07
   ammoType: {fileID: 864101196021808687, guid: 7031908eb70502b40a5596e9521e367c, type: 3}

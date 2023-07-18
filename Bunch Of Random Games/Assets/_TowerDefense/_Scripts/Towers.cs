@@ -6,7 +6,6 @@ using UnityEngine;
 public class Towers : ScriptableObject
 {
     public float towerShootingRate; //Higher it is, speed will be lower
+    public float damageAmount;
     public Bullet ammoType;
-    //Ammo damage
-    //Ammo type
 }

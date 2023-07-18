@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: FasterTower
   m_EditorClassIdentifier: 
   towerShootingRate: 0.1
+  damageAmount: 0.05
   ammoType: {fileID: 864101196021808687, guid: a2500b2503a9fbb4cab2373a1efa3329, type: 3}

@@ -15,6 +15,7 @@ public class ShootingEnemies : MonoBehaviour
     private ObjectPool<Bullet> _bulletPool;
     private Bullet _bulletPrefab;
     private float _bulletShootingRate;//Reversed higher means lower shooting rate
+    private float _bulletDamageAmount;
     private float _elapsedTime;
     private bool enemyLocked;
     public bool isPlaced;
@@ -37,8 +38,9 @@ public class ShootingEnemies : MonoBehaviour
 
         _bulletPrefab = _tower.ammoType;
         _bulletShootingRate = _tower.towerShootingRate;
+        _bulletDamageAmount = _tower.damageAmount;
 
-        parentOfBullets = new GameObject();
+        parentOfBullets = GameObject.FindGameObjectWithTag("ParentOfBullets");
 
         parentOfBullets.name = "Parent Of Bullets";
 
@@ -55,7 +57,7 @@ public class ShootingEnemies : MonoBehaviour
             }
         }
         else
-        {
+        {   
             if(isPlaced)
             {
                 MoveTurret();
@@ -64,20 +66,28 @@ public class ShootingEnemies : MonoBehaviour
                     Shoot();
                 }
             }
+            
         }
+        
     }
     private void MoveTurret()
     {
         var dir = CalculateDirOfTurret();
         Quaternion lookRotation = Quaternion.LookRotation(dir);
         var canMove = RotationLocked(lookRotation);
-        
+        if(!_enemy.gameObject.activeSelf)
+        {
+            _enemy = null;        
+            enemyLocked = false;
+            canMove = false;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.parent.rotation.eulerAngles), _lerpSpeed * Time.deltaTime);          
+        }
         if(canMove)
         {
             enemyLocked = true;
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, _lerpSpeed * Time.deltaTime);
         }
-        else
+        else 
         {
             _enemy = null;        
             enemyLocked = false;
@@ -89,6 +99,7 @@ public class ShootingEnemies : MonoBehaviour
             _enemy = null;
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.parent.rotation.eulerAngles), _lerpSpeed * Time.deltaTime);
         }
+        
     }
     private void Shoot()
     {
@@ -96,6 +107,7 @@ public class ShootingEnemies : MonoBehaviour
         Bullet bullet = _bulletPool.Get();
         bullet.transform.parent = parentOfBullets.transform;
         bullet.KillBullet(ReleaseBullet);
+        bullet.KillBullet(_bulletDamageAmount);
             
         bullet.transform.position = _bulletInstantiateTransform.position;
         bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * _force); 

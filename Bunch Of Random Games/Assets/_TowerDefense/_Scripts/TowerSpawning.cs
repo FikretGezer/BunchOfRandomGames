@@ -13,7 +13,7 @@ public class TowerSpawning : MonoBehaviour
 
     private Camera _cam;
     private void Awake() {
-        _cam = Camera.main;
+        _cam = Camera.main;        
     }
     private void Update() {
         

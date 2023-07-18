@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
 {
     private Action<Bullet> OnDeath;
     private float _elapsedTime;
+    private float damageAmount;
     private void Awake() {
     }
     private void Update() {
@@ -19,9 +20,18 @@ public class Bullet : MonoBehaviour
     {
         OnDeath = action;
     }
+    public void KillBullet(float _damageAmount)
+    {
+        this.damageAmount = _damageAmount;
+    }
     private void OnCollisionEnter(Collision other) {
-        if(other.gameObject.tag == "Player")
-            OnDeath(this);
+        if(other.gameObject.tag == "Enemy")
+        {
+            //Decrease enemy's health
+            var health = other.gameObject.GetComponent<Health>();          
+            health.healthAmount -= damageAmount;
+            OnDeath(this);//Release bullet to the pool
+        }
 
     }
     private bool CalculateTime(float maxTime)

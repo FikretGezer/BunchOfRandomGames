@@ -8,41 +8,38 @@ public class Enemies : MonoBehaviour
     public static List<Enemy> _enemyList = new List<Enemy>();
     public static float spawnObjectMovingSpeed = 1f;
     [SerializeField] private Enemy _enemy;
-    [SerializeField] private float speed = 1f;
-    [SerializeField] private Transform beginningPoint;
-    [SerializeField] private Transform endPoint;
-    [SerializeField] private float shakeStrength = 1f;
-    public static bool isCamShaking;
+    [SerializeField] private float enemyMovingSpeed = 1f;
+    [SerializeField] private Transform enenmyBeginningPoint;
+    [SerializeField] private Transform enemyDestinationPoint;
 
-    private float _elapsedTime;
-    private int count = 1;
-    
     private Camera _mainCam;
     private Vector3 _beginPos;
+    private int unitCount = 1;  
+    private float _elapsedTime = 0f;
+    private GameObject parentOfEnemies;
+
     private void Awake() {
         _mainCam = Camera.main;
         _beginPos = _mainCam.transform.position;
+        parentOfEnemies = new GameObject();
+        parentOfEnemies.name = "Parent Of Enemies";
     }   
     private void Update() {
 
-        spawnObjectMovingSpeed = speed;
+        spawnObjectMovingSpeed = enemyMovingSpeed;
         if(CalculateTime(3f))
         {
-            var spawnedEnemy = Instantiate(_enemy.gameObject, beginningPoint.position, Quaternion.identity);
-            spawnedEnemy.name = "Enemy_" + count.ToString();
-            count++;
+            var spawnedEnemy = Instantiate(_enemy.gameObject, enenmyBeginningPoint.position, Quaternion.identity);
+            spawnedEnemy.name = "Enemy_" + unitCount.ToString();
+            spawnedEnemy.transform.parent = parentOfEnemies.transform;
+            unitCount++;
 
             var agent = spawnedEnemy.GetComponent<NavMeshAgent>();
             if(agent != null)
             {
-                agent.SetDestination(endPoint.position);
-            }
+                agent.SetDestination(enemyDestinationPoint.position);
+            }            
         }
-        if(isCamShaking)
-            StartCoroutine(nameof(ShakeCamera));
-        else
-            StopCoroutine(nameof(ShakeCamera));
-
     }
     public static void AddEnemyToList(Enemy enemy)
     {
@@ -61,22 +58,7 @@ public class Enemies : MonoBehaviour
         {
             _elapsedTime = 0f;
             return true;
-        }             
-        else return false;   
-    }
-    IEnumerator ShakeCamera()
-    {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < 0.3f)
-        {
-            elapsedTime += Time.deltaTime;
-
-            Vector3 camPos = _beginPos + Random.insideUnitSphere * shakeStrength;
-            _mainCam.transform.position = camPos;
-
-            yield return null; 
         }
-        isCamShaking = false;
+        return false;
     }
 }

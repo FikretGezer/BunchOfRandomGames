@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     private NavMeshAgent _agent;
-
+    public GameObject castle;
     private void OnEnable() {
         Enemies.AddEnemyToList(this);
     }
@@ -15,11 +15,18 @@ public class Enemy : MonoBehaviour
     }
     private void Awake() {
         _agent = GetComponent<NavMeshAgent>();
+        castle = GameObject.FindGameObjectWithTag("Castle");
     }
     private void Update() {
         if(ReachedDestinationOrGaveUp(_agent))
         {
-            Enemies.isCamShaking = true;
+            CameraScript.isCamShaking = true;
+
+            if(castle != null)
+            {
+                castle.GetComponent<Health>().healthAmount -= 0.5f;
+            }
+
             Destroy(this.gameObject);
         }
     }
