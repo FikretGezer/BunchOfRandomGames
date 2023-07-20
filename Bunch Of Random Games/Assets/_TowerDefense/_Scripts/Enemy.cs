@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     private NavMeshAgent _agent;
-    public GameObject castle;
+    public HealthBarCastle castle;
     private void OnEnable() {
         Enemies.AddEnemyToList(this);
     }
@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     }
     private void Awake() {
         _agent = GetComponent<NavMeshAgent>();
-        castle = GameObject.FindGameObjectWithTag("Castle");
+        castle = FindObjectOfType<HealthBarCastle>();
     }
     private void Update() {
         if(ReachedDestinationOrGaveUp(_agent))
@@ -24,9 +24,8 @@ public class Enemy : MonoBehaviour
 
             if(castle != null)
             {
-                castle.GetComponent<Health>().healthAmount -= 0.5f;
+                castle.doesCastleGotHit = true;
             }
-
             Destroy(this.gameObject);
         }
     }

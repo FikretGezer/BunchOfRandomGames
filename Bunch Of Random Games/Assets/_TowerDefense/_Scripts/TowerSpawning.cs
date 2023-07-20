@@ -12,6 +12,8 @@ public class TowerSpawning : MonoBehaviour
     private GameObject _selectedPrefab;
 
     private Camera _cam;
+    private int selectedTowerIndex;
+    private bool isSpawned;
     private void Awake() {
         _cam = Camera.main;        
     }
@@ -42,7 +44,7 @@ public class TowerSpawning : MonoBehaviour
         if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _ground))
         {
             var point = hit.point;
-            _spawnedTower.transform.position = new Vector3(RecalculatePosition(point.x), point.y + 1f, RecalculatePosition(point.z));            
+            _spawnedTower.transform.position = new Vector3(RecalculatePosition(point.x), point.y/* + 1f*/, RecalculatePosition(point.z));            
         }
     }
     private void RotateSpawnedTower()
@@ -65,11 +67,22 @@ public class TowerSpawning : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Alpha1))
             {
-                _selectedPrefab = _towers[0];
+                selectedTowerIndex = 0;
+                _selectedPrefab = _towers[selectedTowerIndex];
+                isSpawned = true;
             }
             if(Input.GetKeyDown(KeyCode.Alpha2))
             {
-                _selectedPrefab = _towers[1];
+                selectedTowerIndex = 1;
+                _selectedPrefab = _towers[selectedTowerIndex];
+                isSpawned = true;
+            }
+            if(isSpawned)
+            {
+                MoneyHandle.Instance.ChangeMoney(selectedTowerIndex);
+                if(!MoneyHandle.Instance.canSpawnIt)
+                    _selectedPrefab = null;
+                isSpawned = false;
             }
         }
     }

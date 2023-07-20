@@ -10,6 +10,7 @@ public class CameraScript : MonoBehaviour
     [SerializeField] private float movementSpeed = 1f;
     [SerializeField] private float zoomSpeed = 1f;
     [SerializeField] private float lerpSpeed = 1f;
+    [SerializeField] private Vector3 limitationMin, limitationMax;
     private void Update() {
         if(isCamShaking)
         {
@@ -30,9 +31,8 @@ public class CameraScript : MonoBehaviour
     private void CameraMovementLimit()
     {
         var posLimit = transform.localPosition;
-
-        posLimit.x = Mathf.Clamp(posLimit.x, 10.5f, 17f);
-        posLimit.z = Mathf.Clamp(posLimit.z, -15.3f, -13f);
+        posLimit.x = Mathf.Clamp(posLimit.x, limitationMin.x, limitationMax.x);
+        posLimit.z = Mathf.Clamp(posLimit.z, limitationMin.z, limitationMax.z);
 
         transform.localPosition = posLimit;
     }
@@ -40,6 +40,7 @@ public class CameraScript : MonoBehaviour
     {
         var pos = transform.position;
         pos.y += -Input.mouseScrollDelta.y * zoomSpeed * Time.deltaTime;
+        pos.y = Mathf.Clamp(pos.y, limitationMin.y, limitationMax.y);
         transform.position = pos;
     }
     IEnumerator ShakeCamera(float maxTime, float shakeStrength)
@@ -59,4 +60,5 @@ public class CameraScript : MonoBehaviour
     }
 }
 //x = 10.5, 17
-//y = -13, -15.3
+//z = -13, -15.3
+//y = 14.75, 18.3
