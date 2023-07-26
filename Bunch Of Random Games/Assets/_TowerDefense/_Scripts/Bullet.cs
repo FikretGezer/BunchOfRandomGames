@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     private float _elapsedTime;
     private float damageAmount;
     private ParticleSystem _explosion;
+    
     private void Awake() {
         _explosion = GameObject.FindGameObjectWithTag("explosion").GetComponent<ParticleSystem>();
     }
@@ -22,7 +23,7 @@ public class Bullet : MonoBehaviour
     {
         OnDeath = action;
     }
-    public void KillBullet(float _damageAmount)
+    public void GiveDamage(float _damageAmount)
     {
         this.damageAmount = _damageAmount;
     }
@@ -31,7 +32,8 @@ public class Bullet : MonoBehaviour
         {
             //Decrease enemy's health
             var health = other.gameObject.GetComponent<Health>();          
-            health.healthAmount -= damageAmount;
+            health._enemyScript.healthAmount -= damageAmount;
+            //health.healthAmount -= damageAmount;
             _explosion.transform.position = other.transform.position;
             _explosion.Play();
             OnDeath(this);//Release bullet to the pool

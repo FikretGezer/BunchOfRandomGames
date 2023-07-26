@@ -9,6 +9,8 @@ TagManager:
   - Castle
   - ParentOfBullets
   - explosion
+  - EndDestination
+  - beginningPoint
   layers:
   - Default
   - TransparentFX

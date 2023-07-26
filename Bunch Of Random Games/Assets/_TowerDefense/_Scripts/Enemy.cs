@@ -5,8 +5,12 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private EnemyTypeScriptable _enemyType;
+    private Transform _endDestination;
     private NavMeshAgent _agent;
     public HealthBarCastle castle;
+    [HideInInspector] public float healthAmount;
+     public float maxHealthAmount;
     private void OnEnable() {
         Enemies.AddEnemyToList(this);
     }
@@ -14,8 +18,17 @@ public class Enemy : MonoBehaviour
         Enemies.RemoveEnemyFromList(this);
     }
     private void Awake() {
+        //maxHealthAmount = _enemyType.enemyHealth;
+        //maxHealthAmount = 50f;
+        //healthAmount = maxHealthAmount;
         _agent = GetComponent<NavMeshAgent>();
         castle = FindObjectOfType<HealthBarCastle>();
+        _endDestination = GameObject.FindGameObjectWithTag("EndDestination").transform;
+        if(_endDestination != null)
+            _agent.SetDestination(_endDestination.position);
+    }
+    private void Start() {
+        healthAmount = maxHealthAmount;
     }
     private void Update() {
         if(ReachedDestinationOrGaveUp(_agent))
@@ -26,6 +39,10 @@ public class Enemy : MonoBehaviour
             {
                 castle.doesCastleGotHit = true;
             }
+            Destroy(this.gameObject);
+        }
+        if(healthAmount <= 0)
+        {
             Destroy(this.gameObject);
         }
     }

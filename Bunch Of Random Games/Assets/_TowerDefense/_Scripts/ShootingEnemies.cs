@@ -21,7 +21,7 @@ public class ShootingEnemies : MonoBehaviour
     public bool isPlaced;
     private GameObject parentOfBullets;
     private Vector3 baseRotation;
-
+    private float previousDistance = 100f;
 
     private void Awake() {
 
@@ -107,7 +107,7 @@ public class ShootingEnemies : MonoBehaviour
         Bullet bullet = _bulletPool.Get();
         bullet.transform.parent = parentOfBullets.transform;
         bullet.KillBullet(ReleaseBullet);
-        bullet.KillBullet(_bulletDamageAmount);
+        bullet.GiveDamage(_bulletDamageAmount);
             
         bullet.transform.position = _bulletInstantiateTransform.position;
         bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * _force); 

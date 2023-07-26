@@ -8,11 +8,9 @@ public class HealthBar : MonoBehaviour
     private Health health;
     private Image actualHealthBar;
     private Camera cam;
-    private float healthAmount;
     private void OnEnable() {
-        actualHealthBar = transform.GetChild(0).GetComponent<Image>();
-        healthAmount = 1f;        
-        actualHealthBar.fillAmount = healthAmount;
+        actualHealthBar = transform.GetChild(0).GetComponent<Image>();      
+        actualHealthBar.fillAmount = 1f;
     }
     private void Awake() {
         cam = Camera.main;
@@ -24,17 +22,17 @@ public class HealthBar : MonoBehaviour
 
             if(actualHealthBar.fillAmount > 0.01f)
             {
-                actualHealthBar.fillAmount = Mathf.MoveTowards(actualHealthBar.fillAmount, health.healthAmount, 1f * Time.deltaTime);
+                var hAmount = health._enemyScript.healthAmount;
+                var maxHealth = health._enemyScript.maxHealthAmount;
+                var actualHAmount = hAmount / maxHealth;
+                actualHealthBar.fillAmount = Mathf.MoveTowards(actualHealthBar.fillAmount, actualHAmount, 1f * Time.deltaTime);
             }
             else
             {
                 CameraScript.isCamShaking = true;
                 health.gameObject.SetActive(false);
             }
-        }
-
-        //Decrease Health When Something Happened
-        
+        }        
     }
     public void SetHealth(Health _health)
     {
