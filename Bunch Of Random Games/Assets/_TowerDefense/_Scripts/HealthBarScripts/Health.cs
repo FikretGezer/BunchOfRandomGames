@@ -8,9 +8,15 @@ public class Health : MonoBehaviour
 {
     public static Action<Health> OnHealthAdded = delegate{};
     public static Action<Health> OnHealthRemoved = delegate{};
-    [HideInInspector] public float healthAmount = 1f;
+    [HideInInspector] public float healthAmount = 100f;
+    public Enemy _enemyScript;
     private void OnEnable() {
-        healthAmount = 1f;
+         _enemyScript = this.GetComponent<Enemy>();
+
+
+
+
+        // healthAmount = 1f;
         OnHealthAdded(this);
     }
     private void OnDisable() {

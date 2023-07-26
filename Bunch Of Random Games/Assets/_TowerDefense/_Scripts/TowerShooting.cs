@@ -123,7 +123,7 @@ public class TowerShooting : MonoBehaviour
         Bullet bullet = _bulletPool.Get();
         bullet.transform.parent = parentOfBullets.transform;
         bullet.KillBullet(ReleaseBullet);
-        bullet.KillBullet(_bulletDamageAmount);
+        bullet.GiveDamage(_bulletDamageAmount);
         
         bullet.transform.position = _bulletInstantiateTransform.position;
         bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * _force);      
