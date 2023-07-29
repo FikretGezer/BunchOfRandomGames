@@ -27,15 +27,15 @@ public class TowerSpawning : MonoBehaviour
             {
                 RotateSpawnedTower();
             }
-            // if(Input.GetMouseButtonDown(0)){
-            //     _spawnedTower.transform.GetChild(0).GetComponent<ShootingEnemies>().isPlaced = true;
-            //     var secondFireThing = _spawnedTower.transform.GetChild(1);
-            //     if(secondFireThing.tag == "fire2")
-            //     {
-            //         secondFireThing.GetComponent<ShootingEnemies>().isPlaced = true;
-            //     }
-            //     _spawnedTower = null;
-            // }
+            if(Input.GetMouseButtonDown(0)){
+                _spawnedTower.transform.GetChild(0).GetComponent<ShootingEnemies>().isPlaced = true;
+                var secondFireThing = _spawnedTower.transform.GetChild(1);
+                if(secondFireThing.tag == "fire2")
+                {
+                    secondFireThing.GetComponent<ShootingEnemies>().isPlaced = true;
+                }
+                _spawnedTower = null;
+            }
         }
         else
         {

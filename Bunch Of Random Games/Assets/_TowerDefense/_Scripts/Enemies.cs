@@ -18,9 +18,13 @@ public class Enemies : MonoBehaviour
     private int unitCount = 1;  
     private float _elapsedTime = 0f;
     private GameObject parentOfEnemies;
-    private int enemySpawnAmount;
-    private int currentEnemyCount = 0;
+    [HideInInspector] public int enemySpawnAmount;
+    [HideInInspector] public int currentEnemyCount = 0;
+
+    public static Enemies Instance;
     private void Awake() {
+        if(Instance == null) Instance = this;
+
         _mainCam = Camera.main;
         _beginPos = _mainCam.transform.position;
         parentOfEnemies = new GameObject();
@@ -45,30 +49,30 @@ public class Enemies : MonoBehaviour
                 spawnedEnemy.transform.parent = parentOfEnemies.transform;
                 unitCount++;
 
-                //var agent = spawnedEnemy.GetComponent<NavMeshAgent>();
-                // if(agent != null)
-                // {
-                //     agent.SetDestination(enemyDestinationPoint.position);
-                // }            
-            }
-        }
-        else if(currentEnemyCount >= enemySpawnAmount)
-        {
-            if(HealthBarCastle.castleHealthFillAmount < 0.01f)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-            else
-            {
-                var isThereEnemy = FindObjectOfType<Enemy>() ? true : false;
-                var loadingScene = SceneManager.GetActiveScene().buildIndex + 1;
-                if(loadingScene < SceneManager.sceneCountInBuildSettings && !isThereEnemy)
+                var agent = spawnedEnemy.GetComponent<NavMeshAgent>();
+                if(agent != null)
                 {
-                    SaveScript.Instance.SaveLevel(SaveScript.Instance.GetLevel() + 1);
-                    SceneManager.LoadScene(loadingScene);
-                }
+                    agent.SetDestination(enemyDestinationPoint.position);
+                }            
             }
         }
+        // else if(currentEnemyCount >= enemySpawnAmount)
+        // {
+        //     if(HealthBarCastle.castleHealthFillAmount < 0.01f)
+        //     {
+        //         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //     }
+        //     else
+        //     {
+        //         var isThereEnemy = FindObjectOfType<Enemy>() ? true : false;
+        //         var loadingScene = SceneManager.GetActiveScene().buildIndex + 1;
+        //         if(loadingScene < SceneManager.sceneCountInBuildSettings && !isThereEnemy)
+        //         {
+        //             SaveScript.Instance.SaveLevel(SaveScript.Instance.GetLevel() + 1);
+        //             SceneManager.LoadScene(loadingScene);
+        //         }
+        //     }
+        // }
     }
     private void IncreaseEnemyHealthByLevel()
     {
@@ -77,29 +81,29 @@ public class Enemies : MonoBehaviour
         switch(currentLevel)
         {
             case "Level 1":
-                enemySpawnAmount = 1;
+                enemySpawnAmount = 10;
                 _enemy.maxHealthAmount = 100f;
                 castleHealth = 100f;
                 break;
             case "Level 2":
-                enemySpawnAmount = 2;
+                enemySpawnAmount = 12;
                 _enemy.maxHealthAmount = 110f;
                 castleHealth = 120f;
                 break;
             case "Level 3":
-                enemySpawnAmount = 3;
+                enemySpawnAmount = 13;
                 _enemy.maxHealthAmount = 120f;
                 castleHealth = 130f;
                 break;
             case "Level 4":
-                enemySpawnAmount = 4;
+                enemySpawnAmount = 14;
                 _enemy.maxHealthAmount = 130f;
-                castleHealth = 100f;
+                castleHealth = 140f;
                 break;
             case "Level 5":
-                enemySpawnAmount = 5;
+                enemySpawnAmount = 15;
                 _enemy.maxHealthAmount = 140f;
-                castleHealth = 100f;
+                castleHealth = 150f;
                 break;
         }
         HealthBarCastle.maxHalthAmountOfCastle = castleHealth;

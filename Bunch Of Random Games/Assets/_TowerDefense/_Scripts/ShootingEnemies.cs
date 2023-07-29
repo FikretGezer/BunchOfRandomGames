@@ -137,7 +137,8 @@ public class ShootingEnemies : MonoBehaviour
     }
     private Vector3 CalculateDirOfTurret()
     {
-        Vector3 dir = (_enemy.position + _enemy.forward * _moveAmount) - transform.position;
+        Vector3 dir = default;
+        dir = (_enemy.position + _enemy.forward * _moveAmount) - transform.position;
         dir = dir.normalized;
         return dir;
     }

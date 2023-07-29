@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_TowerDefense/Scenes/Levels/Level 4.unity
     guid: 2e5b1206a5d26104e848e6343f6b2d54
+  - enabled: 1
+    path: Assets/_TowerDefense/Scenes/Levels/Level 5.unity
+    guid: 97644e73793c51446b83e38d55a10f08
   m_configObjects: {}

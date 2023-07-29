@@ -23,9 +23,9 @@ public class Enemy : MonoBehaviour
         //healthAmount = maxHealthAmount;
         _agent = GetComponent<NavMeshAgent>();
         castle = FindObjectOfType<HealthBarCastle>();
-        _endDestination = GameObject.FindGameObjectWithTag("EndDestination").transform;
-        if(_endDestination != null)
-            _agent.SetDestination(_endDestination.position);
+        // _endDestination = GameObject.FindGameObjectWithTag("EndDestination").transform;
+        // if(_endDestination != null)
+        //     _agent.SetDestination(_endDestination.position);
     }
     private void Start() {
         healthAmount = maxHealthAmount;
