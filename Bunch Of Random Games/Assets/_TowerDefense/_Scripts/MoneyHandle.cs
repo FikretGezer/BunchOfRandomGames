@@ -9,7 +9,7 @@ public class MoneyHandle : MonoBehaviour
     [SerializeField] private TMP_Text _moneyTextHolder;
     [SerializeField] public int _towerMoney = 1000;
     [Header("Towers' Prizes")]
-    [SerializeField] private int firstTowerPrize, secondTowerPrize;
+    [SerializeField] private int firstTowerPrize, secondTowerPrize, thirdTowerPrize;
     public bool canSpawnIt;
 
     private void Awake() {
@@ -36,6 +36,9 @@ public class MoneyHandle : MonoBehaviour
             case 1: 
                 decreasedMoney -= secondTowerPrize;
                 break;
+            case 2: 
+                decreasedMoney -= thirdTowerPrize;
+                break;            
             
         }
         if(decreasedMoney < 0)

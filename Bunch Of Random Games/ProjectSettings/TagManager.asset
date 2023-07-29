@@ -11,6 +11,7 @@ TagManager:
   - explosion
   - EndDestination
   - beginningPoint
+  - fire2
   layers:
   - Default
   - TransparentFX

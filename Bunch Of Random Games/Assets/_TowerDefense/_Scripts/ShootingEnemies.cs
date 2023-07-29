@@ -85,6 +85,8 @@ public class ShootingEnemies : MonoBehaviour
         if(canMove)
         {
             enemyLocked = true;
+            lookRotation.x = transform.rotation.x;
+            lookRotation.z = transform.rotation.z;
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, _lerpSpeed * Time.deltaTime);
         }
         else 

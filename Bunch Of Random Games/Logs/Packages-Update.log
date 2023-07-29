@@ -45,7 +45,11 @@ The following packages were updated:
   com.unity.timeline from version 1.6.2 to 1.6.5
   com.unity.visualscripting from version 1.7.6 to 1.8.0
 
+<<<<<<< Updated upstream
 === Wed Jul 26 11:49:28 2023
+=======
+=== Thu Jul 27 14:28:41 2023
+>>>>>>> Stashed changes
 
 Packages were changed.
 Update Mode: updateDependencies

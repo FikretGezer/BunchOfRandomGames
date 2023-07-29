@@ -17,15 +17,15 @@ public class CameraScript : MonoBehaviour
             StartCoroutine(ShakeCamera(maxShakeTime, shakeStrength));
         }
         CameraMovement();
-        CameraZooming();
-        CameraMovementLimit();
+        //CameraZooming();
+        //CameraMovementLimit();
     }
     private void CameraMovement()
     {
         var hor = Input.GetAxis("Horizontal");
         var ver = Input.GetAxis("Vertical");
 
-        var move = Vector3.right * hor + Vector3.up * ver;
+        var move = transform.right * hor + transform.up * ver;
         transform.Translate(move * movementSpeed * Time.deltaTime);
     }
     private void CameraMovementLimit()
