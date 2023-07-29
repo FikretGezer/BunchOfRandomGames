@@ -135,11 +135,21 @@ public class ShootingEnemies : MonoBehaviour
         enemyLocked = true;
         return currentSelectedEnemy.transform;
     }
+    public float multiplier = 1f;
     private Vector3 CalculateDirOfTurret()
     {
         Vector3 dir = default;
-        dir = (_enemy.position + _enemy.forward * _moveAmount) - transform.position;
-        dir = dir.normalized;
+        var enemyChild = _enemy.transform.GetChild(0);
+        if(enemyChild != null)
+        {
+            dir = (enemyChild.position + enemyChild.forward * _moveAmount) - transform.position;
+            dir = dir.normalized;
+        }
+        else
+        {
+            dir = (_enemy.position + _enemy.forward * _moveAmount) - transform.position;
+            dir = dir.normalized;
+        }
         return dir;
     }
     private bool RotationLocked(Quaternion lookRot)
